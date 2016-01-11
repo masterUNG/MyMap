@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,21 @@ public class MainActivity extends AppCompatActivity {
         openServiceGetLocation();
 
     }   // Main Method
+
+    public Location requestUpdateFromProvider(String strProvider, String strError) {
+
+        Location objLocation = null;
+
+        if (objLocationManager.isProviderEnabled(strProvider)) {
+
+            objLocationManager.requestLocationUpdates(strProvider, 1000, 10, objLocationListener);
+
+        } else {
+            Toast.makeText(MainActivity.this, strError, Toast.LENGTH_SHORT).show();
+        }
+
+        return null;
+    }
 
     private void bindWidget() {
         showLatTextView = (TextView) findViewById(R.id.txtShowLat);
