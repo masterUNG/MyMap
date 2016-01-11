@@ -191,9 +191,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickMyMap(View view) {
 
+        String strLat = showLatTextView.getText().toString();
+        String strLng = showLngTextView.getText().toString();
+
         Intent objIntent = new Intent(MainActivity.this, MapsActivity.class);
+
+        //Sent lat,lng to MapsActivity
+        objIntent.putExtra("Lat", strLat);
+        objIntent.putExtra("Lng", strLng);
+
         startActivity(objIntent);
 
-    }
+    }   // clickMyMap
 
 }   // Main Class
