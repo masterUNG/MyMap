@@ -43,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
 
         GPSABoolean = objLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+        if (!GPSABoolean) {
+
+            //ไม่มี GPS
+            networkABoolean = objLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!networkABoolean) {
+
+                //ไม่มี Net
+                Toast.makeText(MainActivity.this, "Stant Alone", Toast.LENGTH_SHORT).show();
+
+            }   // if2
+
+        }   // if1
 
 
     }   // onStart
@@ -55,7 +67,40 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupForRestart() {
 
-    }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        objLocationManager.removeUpdates(objLocationListener);
+        String strLat = "UnKnow";
+        String strLng = "UnKnow";
+
+        Location networkLocation = requestLocation(LocationManager.NETWORK_PROVIDER, "Internet not Connected");
+        if (networkLocation != null) {
+
+            strLat = String.format("%.7f", networkLocation.getLatitude());
+            strLat = String.format("%.7f", networkLocation.getLongitude());
+
+        }   // if
+
+        Location GPSLocation = requestLocation(LocationManager.GPS_PROVIDER, "GPS false");
+        if (GPSLocation != null) {
+
+            strLat = String.format("%.7f", GPSLocation.getLatitude());
+            strLng = String.format("%.7f", GPSLocation.getLongitude());
+
+        }   // if
+
+        showLatTextView.setText(strLat);
+        showLngTextView.setText(strLng);
+
+    }   // setupForRestart
 
     @Override
     protected void onStop() {
